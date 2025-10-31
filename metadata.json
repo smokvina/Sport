@@ -1,0 +1,5 @@
+{
+  "name": "Naprid Bili asistent",
+  "description": "A specialized chatbot assistant for Hajduk Split fans, powered by the Gemini API.",
+  "requestFramePermissions": []
+}
