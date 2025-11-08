@@ -1,7 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat, GroundingChunk, GenerateContentResponse, ToolConfig } from '@google/genai';
 import { Message } from '../types';
+import MarkdownRenderer from './MarkdownRenderer';
+import ShareButtons from './ShareButtons';
 
 const BILI_ASISTENT_PROMPT = `
 [ULOGA I KONTEKST]
@@ -26,6 +27,24 @@ Proaktivno i reaktivno informirati korisnike o rasporedu utakmica HNK Hajduk Spl
    * Kada korisnik otvori aplikaciju ili na njegov zahtjev ("Ima li što novo?"), pruži kratki sažetak najnovijih vijesti.
    * Izvor: Koristi isključivo www.hajduk.hr za službene vijesti (npr. stanje s ulaznicama, izjave trenera, nove vijesti o igračima).
    * Format odgovora: "Evo zadnjih novosti s Poljuda: [Kratka vijest 1]. Također, [Kratka vijest 2]."
+ * Statistika i Tablice (Sekundarni zadatak):
+   * Kada korisnik zatraži "tablica HNL", "poredak u ligi", "rezultati zadnjih utakmica" ili slično, koristi Google Search alat za pronalazak najsvježijih podataka.
+   * Formatiraj odgovor ISKLJUČIVO kao Markdown tablicu za pregledan prikaz. Pazi na poravnanje i zaglavlja.
+   * Primjer za tablicu lige:
+     | Poz. | Klub         | Odig. | Bod. |
+     |:----:|:-------------|:-----:|:----:|
+     | 1.   | Dinamo       | 36    | 82   |
+     | 2.   | Hajduk       | 36    | 72   |
+   * Primjer za rezultate:
+     | Protivnik | Rezultat | Natjecanje |
+     |:----------|:---------|:-----------|
+     | Rijeka    | 1:0      | HNL        |
+     | Osijek    | 2:2      | HNL        |
+[FORMATIRANJE PODATAKA]
+ * Datumi i Vrijeme: Uvijek koristi hrvatski format za sve odgovore.
+   * Datum: DD.MM.YYYY. (npr. 24.12.2024.)
+   * Dan u tjednu: Puni naziv na hrvatskom (npr. Ponedjeljak, Utorak, Srijeda...).
+   * Vrijeme: 24-satni format (npr. 19:00).
 [TON I STIL KOMUNIKACIJE]
  * Strastven i Prijateljski: Obraćaj se korisniku s "ti". Koristi fraze poput "Bili", "Naš Hajduk", "Ajmo Bili!".
  * Lokalni prizvuk (umjereno): Možeš koristiti riječi poput "skupit se", "gledat", "naš klub", "ludilo".
@@ -146,9 +165,10 @@ const BiliAssistant: React.FC = () => {
       {/* Chat messages */}
       <div className="flex-1 p-4 overflow-y-auto">
         {messages.map((msg, index) => (
-          <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
+          <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-4 group`}>
             <div className={`max-w-md p-3 rounded-lg ${msg.role === 'user' ? 'bg-blue-700 text-white' : 'bg-gray-200 text-gray-800'}`}>
-              <p className="whitespace-pre-wrap">{msg.text}</p>
+              <MarkdownRenderer text={msg.text} />
+              {msg.role === 'model' && msg.text && <ShareButtons text={msg.text} />}
               {msg.groundingChunks && msg.groundingChunks.length > 0 && renderGrounding(msg.groundingChunks)}
             </div>
           </div>

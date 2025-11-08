@@ -28,7 +28,7 @@ const ImageEditor: React.FC = () => {
 
   const handleGenerateClick = async () => {
     if (!originalFile || !prompt) {
-      setError('Please upload an image and enter a prompt.');
+      setError('Molimo učitaj sliku i unesi opis.');
       return;
     }
 
@@ -75,11 +75,11 @@ const ImageEditor: React.FC = () => {
 
 
       if (!foundImage) {
-        setError('The model did not return an image. Please try a different prompt.');
+        setError('Model nije vratio sliku. Pokušaj s drugačijim opisom.');
       }
     } catch (err) {
       console.error(err);
-      setError('An error occurred while generating the image. Please try again.');
+      setError('Došlo je do greške prilikom generiranja slike. Molimo pokušaj ponovno.');
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +93,7 @@ const ImageEditor: React.FC = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="file-upload" className="block text-sm font-medium text-gray-300 mb-2">
-                1. Upload Your Image
+                1. Učitaj svoju sliku
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
@@ -102,25 +102,25 @@ const ImageEditor: React.FC = () => {
                   </svg>
                   <div className="flex text-sm text-gray-400">
                     <label htmlFor="file-upload" className="relative cursor-pointer bg-gray-700 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-800 focus-within:ring-blue-500 px-2">
-                      <span>Upload a file</span>
+                      <span>Učitaj datoteku</span>
                       <input id="file-upload" name="file-upload" type="file" className="sr-only" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
+                    <p className="pl-1">ili je povuci ovdje</p>
                   </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-gray-500">PNG, JPG, GIF do 10MB</p>
                 </div>
               </div>
             </div>
 
             <div>
               <label htmlFor="prompt" className="block text-sm font-medium text-gray-300">
-                2. Describe Your Edit
+                2. Opiši što želiš izmijeniti
               </label>
               <textarea
                 id="prompt"
                 rows={3}
                 className="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-white p-2"
-                placeholder="e.g., Add a retro filter"
+                placeholder="npr., Dodaj retro filter"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -136,10 +136,10 @@ const ImageEditor: React.FC = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Generating...
+                  Generiram...
                 </>
               ) : (
-                'Generate Image'
+                'Generiraj sliku'
               )}
             </button>
              {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
@@ -153,18 +153,18 @@ const ImageEditor: React.FC = () => {
                 {originalImage ? (
                   <img src={originalImage} alt="Original" className="max-h-full max-w-full rounded-lg object-contain" />
                 ) : (
-                  <p className="text-gray-500">Your image will appear here</p>
+                  <p className="text-gray-500">Tvoja slika će se pojaviti ovdje</p>
                 )}
               </div>
             </div>
             <div className="text-center">
-              <h3 className="text-lg font-medium text-gray-300 mb-2">Edited</h3>
+              <h3 className="text-lg font-medium text-gray-300 mb-2">Uređeno</h3>
               <div className="aspect-square bg-gray-700 rounded-lg flex items-center justify-center">
-                {isLoading && <p className="text-gray-400">Editing in progress...</p>}
+                {isLoading && <p className="text-gray-400">Uređivanje u tijeku...</p>}
                 {editedImage && !isLoading && (
-                  <img src={editedImage} alt="Edited" className="max-h-full max-w-full rounded-lg object-contain" />
+                  <img src={editedImage} alt="Uređeno" className="max-h-full max-w-full rounded-lg object-contain" />
                 )}
-                {!editedImage && !isLoading && <p className="text-gray-500">Your edited image will appear here</p>}
+                {!editedImage && !isLoading && <p className="text-gray-500">Tvoja uređena slika će se pojaviti ovdje</p>}
               </div>
             </div>
           </div>
